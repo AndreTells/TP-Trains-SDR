@@ -26,4 +26,3 @@ int main(void){
   send_message(response);
   return 0;
 }
-

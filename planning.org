@@ -30,10 +30,10 @@ command.
 - int train_position;
 - int train_limit;
 
-* Todo List [0%]
+* Todo List [22%]
 ** DONE iMplement dummy server
 ** TODO implement dummy client
-** TODO simulate a connection between client and server in a file
+** DONE simulate a connection between client and server in a file
 ** TODO make server update a train's predecessor's eoa when it moves
 ** TODO change to socket based communication
 ** TODO test connection server-client
