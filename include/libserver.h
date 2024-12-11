@@ -7,6 +7,8 @@
 
 typedef struct {
   Train_t trains[MAX_TRAINS];
+  int start;
+  int next;
 } Server_t;
 
 enum Server_result_e {

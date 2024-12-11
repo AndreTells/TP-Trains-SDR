@@ -1,5 +1,5 @@
-#ifndef TRAIN_COMMANDS_H_
-#define TRAIN_COMMANDS_H_
+#ifndef TRAIN_COMMS_H_
+#define TRAIN_COMMS_H_
 
 // Communication codes
 // server ACK
@@ -28,4 +28,5 @@ typedef struct{
 
 int send_message(Message_t* msg);
 
+Message_t* listen_message();
 #endif // TRAIN_COMMANDS_H_

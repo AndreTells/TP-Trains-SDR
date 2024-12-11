@@ -18,6 +18,7 @@
 - train request movement limit extension (211)
 ** Info (3XX)
 - request state of the system (310)
+- send train info (300)
 * Command Structure
 the first digit indicates the type of the command, the second who sent it (1 =
 sent by the client and 0 = sent by the server) and the third is an id for the
@@ -30,7 +31,7 @@ command.
 - int train_limit;
 
 * Todo List [0%]
-** TODO implement dummy server
+** DONE iMplement dummy server
 ** TODO implement dummy client
 ** TODO simulate a connection between client and server in a file
 ** TODO make server update a train's predecessor's eoa when it moves
