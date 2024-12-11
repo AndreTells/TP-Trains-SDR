@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "verbose_mode.h"
 #include "libserver.h"
 #include "constants.h"
 #include "comms.h"
@@ -88,7 +89,7 @@ Message_t* route_messages(Server_t* server, Message_t* msg){
       break;
 
     case INFO_REQ_CMD:
-      printf("not implemented");
+      IF_VERBOSE(printf("not implemented"));
       break;
   }
 
@@ -181,7 +182,7 @@ Server_t* init_server(){
   Train_t NULL_TRAIN ={0,-1,-1,-1};
   for(int i=0; i<MAX_TRAINS; i++){
     serv->trains[i] = NULL_TRAIN;
-    printf("train t_%d of the server created id: %d\n", i, serv->trains[i].id);
+    IF_VERBOSE(printf("train t_%d of the server created id: %d\n", i, serv->trains[i].id));
   }
 
   return serv;
