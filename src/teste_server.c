@@ -58,8 +58,7 @@ int main(void){
     // Respond to client:
     strcpy(server_message, client_message);
     
-    if (sendto(socket_desc, server_message, strlen(server_message), 0,
-         (struct sockaddr*)&client_addr, client_struct_length) < 0){
+    if (sendto(socket_desc, server_message, strlen(server_message), 0,(struct sockaddr*)&client_addr, client_struct_length) < 0){
         printf("Can't send\n");
         return -1;
     }
