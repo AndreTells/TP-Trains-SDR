@@ -1,0 +1,41 @@
+#+title: Planning
+
+* Entities
+- Server
+- Train (Client)
+- Controller
+- Interface
+
+* Commands
+** ACK (0XX)
+- server ack success (000)
+- server ack fail (001)
+** Connection (1XX)
+- connect a train (110)
+- disconnect a train (111)
+** Movement (2XX)
+- update train position (210)
+- train request movement limit extension (211)
+** Info (3XX)
+- request state of the system (310)
+* Command Structure
+the first digit indicates the type of the command, the second who sent it (1 =
+sent by the client and 0 = sent by the server) and the third is an id for the
+command.
+
+* Message Structure
+- char cmd_code[3];
+- int train_id;
+- int train_position;
+- int train_limit;
+
+* Todo List [0%]
+** TODO implement dummy server
+** TODO implement dummy client
+** TODO simulate a connection between client and server in a file
+** TODO make server update a train's predecessor's eoa when it moves
+** TODO change to socket based communication
+** TODO test connection server-client
+** TODO implement controller
+** TODO test connection controller-server
+** TODO test connection controller-server & server-client
