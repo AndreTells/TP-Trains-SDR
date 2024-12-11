@@ -24,11 +24,28 @@ int main(int argc, char * argv[]){
 
   // loop
   while(1){
+    IF_VERBOSE(printf("waiting for a message ... \n"));
     Message_t* msg = listen_message();
 
+    IF_VERBOSE(printf("waiting for a message ... finished\n"));
+
+    IF_VERBOSE(printf("treating message ... \n"));
     Message_t* response = route_messages(serv, msg);
 
+    IF_VERBOSE(printf("treating message ... finished\n"));
+
+    IF_VERBOSE(printf("sending response ... \n"));
     send_message(response);
+    IF_VERBOSE(printf("sending response ... finished\n"));
+
+    IF_VERBOSE(
+               printf("continue ? (y/n)\n");
+               char res [2];
+               read(0,res,2);
+               if(res[0] == 'n'){
+                   break;
+               }
+               );
   }
   return 0;
 }
