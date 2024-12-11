@@ -25,7 +25,10 @@ CFLAGS += -I$(INCLUDE_DIR)
 # LDFLAGS = -lrt
 SRC_DUMMY = ./src/dummy_main.c ./src/dummy_comms.c ./src/dummy_server.c
 
-dummy_version:
+server:
+	clang $(CFLAGS) src/libserver.c src/dummy_comms.c src/server.c -o ./bin/server
+
+dummy_version_server:
 	clang $(CFLAGS) src/dummy_libserver.c src/dummy_comms.c src/dummy_server.c -o ./bin/dummy_version
 
 teste_version_server:

@@ -35,11 +35,13 @@ typedef struct{
 
 typedef struct{
   int cmd_code;
+  int id;
   int pos;
 } Data_pos_t;
 
 typedef struct{
   int cmd_code;
+  int id;
   int eoa;
 } Data_eoa_t;
 
