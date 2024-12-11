@@ -32,4 +32,4 @@ teste_version_server:
 	clang $(CFLAGS) src/teste_server.c  -o ./bin/teste_version_server
 
 teste_version_client:
-	clang $(CFLAGS) src/dummy_client.c -o ./bin/teste_version_client
+	clang $(CFLAGS) src/teste_client.c -o ./bin/teste_version_client

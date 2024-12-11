@@ -18,4 +18,7 @@ enum Server_result_e {
 
 Message_t* create_server_ACK_msg(Train_t train, enum Server_result_e res);
 
+Message_t* server_add_train(Server_t server, Message_t* msg);
+Message_t* route_messages(Server_t server, Message_t* msg);
+
 #endif // LIBSERVER_H_
