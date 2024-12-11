@@ -27,3 +27,6 @@ SRC_DUMMY = ./src/dummy_main.c ./src/dummy_comms.c ./src/dummy_server.c
 
 dummy_version:
 	clang $(CFLAGS) src/dummy_libserver.c src/dummy_comms.c src/dummy_server.c -o ./bin/dummy_version
+
+teste_version:
+	clang $(CFLAGS) src/teste_server.c src/dummy_client.c -o ./bin/teste_version
