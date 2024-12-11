@@ -19,10 +19,14 @@ int main(void){
   // simulate a train connecting
 
   // loop
+  Message_test_t test = {1, 2};
+
   Message_t* msg = listen_message();
 
   Message_t* response = route_messages(serv, msg);
 
+  memcpy(response->data, &test, sizeof(Message_test_t));
   send_message(response);
+  printf("%d", ((Message_test_t *) response->data)->value);
   return 0;
 }

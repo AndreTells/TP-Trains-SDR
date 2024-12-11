@@ -1,6 +1,8 @@
 #ifndef TRAIN_COMMS_H_
 #define TRAIN_COMMS_H_
 
+#define MAX_MESSAGE_SIZE 128
+
 // Communication codes
 // server ACK
 #define SERVER_ACK_SUCCESS  0
@@ -19,11 +21,9 @@
 #define INFO_SEND_CMD 300
 
 // structure of a message
-typedef struct{
+typedef union{
   int cmd_code;
-  int train_id;
-  int train_pos;
-  int train_eoa;
+  void* data[MAX_MESSAGE_SIZE];
 } Message_t;
 
 int send_message(Message_t* msg);

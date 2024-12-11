@@ -15,6 +15,10 @@ Message_t* create_server_ACK_msg(Train_t train, enum Server_result_e res){
   else{
     msg->cmd_code = SERVER_ACK_ERROR;
   }
+
+  msg->train_id = train.id;
+  msg->train_pos = train.pos;
+  msg->train_eoa = train.eoa;
   return msg;
 }
 
