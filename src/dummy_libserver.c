@@ -13,6 +13,8 @@ struct Server_t {
   int next;
 };
 
+Message_t* server_add_train(Server_t* server, Message_t* msg);
+
 Message_data_t* create_server_ERR_msg(){
   Message_data_t* data = (Message_data_t*) malloc(sizeof(Message_data_t));
   data->cmd_code = SERVER_ACK_ERROR;
