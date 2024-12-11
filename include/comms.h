@@ -1,10 +1,10 @@
-#ifndef TRAIN_COMMS_H_
-#define TRAIN_COMMS_H_
+#ifndef COMMS_H_
+#define COMMS_H_
 
 #define MAX_MESSAGE_SIZE 128
 
 // Communication codes
-// server ACK
+
 #define SERVER_ACK_SUCCESS  0
 #define SERVER_ACK_ERROR  1
 
@@ -24,7 +24,35 @@
 typedef union{
   int cmd_code;
   void* data[MAX_MESSAGE_SIZE];
+} Message_data_t;
+
+typedef struct{
+  int cmd_code;
+  int id;
+  int pos;
+  int eoa;
+} Data_full_train_t;
+
+typedef struct{
+  int cmd_code;
+  int pos;
+} Data_pos_t;
+
+typedef struct{
+  int cmd_code;
+  int eoa;
+} Data_eoa_t;
+
+typedef struct{
+  struct sockaddr* host_addr;
+  struct sockaddr* target_addr;
+  Message_data_t data;
 } Message_t;
+
+
+Message_t* package_message_data(struct sockaddr* host_addr,
+                                struct sockaddr* target_addr,
+                                Message_data_t* data);
 
 int send_message(Message_t* msg);
 

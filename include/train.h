@@ -3,9 +3,9 @@
 #include <sys/socket.h>
 #include "comms.h"
 
+
 typedef struct {
   struct sockaddr* addr;
-  socklen_t addr_len;
   int id;
   int pos;
   int eoa;

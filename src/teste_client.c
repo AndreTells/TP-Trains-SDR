@@ -48,7 +48,8 @@ int main(int argv, char *argc[]){
     // Get input from the user:
 
     // Send the message to server:
-    if(sendto(server_socket, client_message, strlen(client_message), 0,(struct sockaddr*)&server_addr, server_struct_length) < 0){
+    if(sendto(server_socket, client_message, strlen(client_message), 0,
+              (struct sockaddr*)&server_addr, server_struct_length) < 0){
         printf("Unable to send message\n");
         return -1;
     }
@@ -57,7 +58,8 @@ int main(int argv, char *argc[]){
     printf("waiting for response\n");
     
     // Receive the server's response:
-    if(recvfrom(server_socket, server_message, sizeof(server_message), 0,(struct sockaddr*)&server_addr, (socklen_t*)&server_struct_length) < 0){
+    if(recvfrom(server_socket, server_message, sizeof(server_message), 0,
+                (struct sockaddr*)&server_addr, (socklen_t*)&server_struct_length) < 0){
         printf("Error while receiving server's msg\n");
         return -1;
     }
