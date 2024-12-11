@@ -1,3 +1,9 @@
+/*
+ * @file
+ * @section DESCRIPTION
+ * function containing all functions for a train to be used by another program
+ * with as little influence as possible on the implementation of the train
+*/
 #ifndef TRAIN_H_
 #define TRAIN_H_
 #include <sys/socket.h>
@@ -11,15 +17,6 @@ typedef struct {
   int eoa;
 }Train_t;
 
-//Train_t NULL_TRAIN ={0,0,0,0,0};
+Train_t* init_train(Message_t connection_msg);
 
-/*
-Message_t* create_train_connect_msg( Train_t train, int train_position);
-
-Message_t* create_train_disconnect_msg( Train_t train);
-
-Message_t* create_train_update_pos_msg(Train_t train);
-
-Message_t* create_train_mov_req_msg(Train_t train);
-*/
 #endif // TRAIN_H_
