@@ -1,3 +1,4 @@
+bin/*
 # Prerequisites
 *.d
 
@@ -29,7 +30,6 @@
 *.dylib
 
 # Executables
-bin/
 *.exe
 *.out
 *.app
