@@ -5,11 +5,13 @@
 #include <string.h>
 #include "comms.h"
 
+#define LEN_IPV4 32
 
 
-int send_message(Message_t* msg, int socket_client,const struct sockaddr *server_address,socklen_t server_addrlen){
-// we also can test use the flag MSG_CONFIRM to have a confirmation
-  if(sendto(socket_client, msg, sizeof(*msg), 0,server_address, server_addrlen)<0){
+
+int send_message(int socket_fd, Message_t* msg){
+  // we also can test use the flag MSG_CONFIRM to have a confirmation
+  if(sendto(socket_fd, msg, sizeof(*msg), 0,msg->target_addr, LEN_IPV4)<0){
     perror("Its impossible to send the message\n");
     return -1;
   }
@@ -17,9 +19,10 @@ int send_message(Message_t* msg, int socket_client,const struct sockaddr *server
   return 0;
 }
 
-Message_t* listen_message(int client_socket, struct sockaddr_in* server_addr, socklen_t* addr_len) {
+Message_t* listen_message(int socket_fd) {
 
     Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
+    socklen_t addr_len;
 
     if (!msg) {
         perror("Erro ao alocar memória para mensagem");
@@ -27,7 +30,7 @@ Message_t* listen_message(int client_socket, struct sockaddr_in* server_addr, so
     }
 
     // Receber mensagem do servidor
-   if(recvfrom(client_socket, msg, sizeof(*msg), 0,(struct sockaddr*)server_addr, addr_len) < 0){
+   if(recvfrom(socket_fd, msg, sizeof(*msg), 0, NULL, &addr_len) < 0){
         perror("Erro ao receber mensagem");
         free(msg);
         exit(-1);
@@ -39,6 +42,7 @@ Message_t* listen_message(int client_socket, struct sockaddr_in* server_addr, so
 Message_t* package_message_data(struct sockaddr* host_addr,
                                 struct sockaddr* target_addr,
                                 Message_data_t* data){
+  //TODO make a check on the Message_data
   Message_t* msg = (Message_t*) malloc(sizeof(Message_t));
   msg->host_addr = host_addr;
   msg->target_addr = target_addr;

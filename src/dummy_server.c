@@ -17,14 +17,15 @@ int main(void){
   // simulate a train connecting
 
   // loop
-  Message_test_t test = {30, 2};
+  Message_data_t test;
+  test.cmd_code = 3;
   
-  send_message(package_message_data(NULL,NULL,(Message_data_t*)&test),0,NULL,0);
+  send_message(1,package_message_data(NULL,NULL,(Message_data_t*)&test));
 
-  Message_t* msg = listen_message(0,0,0);
+  Message_t* msg = listen_message(0);
 
   Message_t* response = route_messages(serv, msg);
 
-  send_message(response,0,NULL,0);
+  send_message(0,response);
   return 0;
 }

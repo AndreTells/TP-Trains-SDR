@@ -132,7 +132,17 @@ Message_t* package_message_data(struct sockaddr* host_addr,
                                 struct sockaddr* target_addr,
                                 Message_data_t* data);
 
-int send_message(Message_t* msg, int socket_client,const struct sockaddr *server_address,socklen_t server_addrlen);
+/* @brief sends a message through the given file descriptor
+ * @param socket_client file descriptor of the socket
+ * @param msg the message to be sent
+ * @return res 0 if no errors happened and -1 otherwise
+ */
+int send_message(int socket_fd, Message_t* msg);
 
-Message_t* listen_message(int client_socket, struct sockaddr_in* server_addr, socklen_t* addr_len);
+
+/* @brief receives a message through the given file descriptor
+ * @param socket_client file descriptor of the socket
+ * @return msg the received message
+ */
+Message_t* listen_message(int socket_fd);
 #endif // TRAIN_COMMANDS_H_
