@@ -16,12 +16,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int main(int argv, char *argc[]) {
+#define MESSAGE_SIZE 2000
+#define SOCKET_PORT 7000
+
+int main(void) {
   // create buffer
-  char server_message[2000], client_message[2000] = "Olá";
+  char server_message[MESSAGE_SIZE];
+  char client_message[MESSAGE_SIZE] = "Olá";
 
   // create a socket
-  int server_socket;
+  int server_socket = 0;
   server_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
   if (server_socket < 0) {
@@ -33,7 +37,7 @@ int main(int argv, char *argc[]) {
 
   struct sockaddr_in server_addr;
   server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(7000);  // mudar porta ? Acho que n
+  server_addr.sin_port = htons(SOCKET_PORT);  // mudar porta ? Acho que n
   // server_addr.sin_addr.s_addr = INADDR_ANY;                   // mudar isso
   server_addr.sin_addr.s_addr =
       inet_addr("192.168.1.108");  //       pra isso na rede da sala ?

@@ -20,7 +20,9 @@ Message_data_t* create_server_ERR_msg() {
 }
 
 Message_t* route_messages(Server_t* server, Message_t* msg) {
-  Message_t* response = package_message_data(msg->target_addr, msg->host_addr,
+  server = NULL;
+  Message_t* response = package_message_data((Host_address_t*)msg->target_addr,
+                                             (Remote_address_t*)msg->host_addr,
                                              create_server_ERR_msg());
 
   return response;

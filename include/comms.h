@@ -35,6 +35,14 @@
 // structure of a message
 #define MAX_MESSAGE_SIZE 2024
 
+typedef struct {
+  struct sockaddr address;
+}Host_address_t;
+
+typedef struct {
+  struct sockaddr address;
+}Remote_address_t;
+
 /*
  * @union Message_data_t
  * @brief 'interface' for message data
@@ -127,8 +135,8 @@ typedef struct {
  * @param data contents of teh message
  * @return msg the data given packaged as a message
  */
-Message_t* package_message_data(struct sockaddr* host_addr,
-                                struct sockaddr* target_addr,
+Message_t* package_message_data(Host_address_t* host_addr,
+                                Remote_address_t* target_addr,
                                 Message_data_t* data);
 
 /* @brief sends a message through the given file descriptor

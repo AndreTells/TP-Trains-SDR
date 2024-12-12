@@ -20,7 +20,7 @@ int send_message(int socket_fd, Message_t* msg) {
 
 Message_t* listen_message(int socket_fd) {
   Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
-  socklen_t addr_len;
+  socklen_t addr_len=0;
 
   if (!msg) {
     perror("Erro ao alocar memória para mensagem");
@@ -37,13 +37,13 @@ Message_t* listen_message(int socket_fd) {
   return msg;
 }
 
-Message_t* package_message_data(struct sockaddr* host_addr,
-                                struct sockaddr* target_addr,
+Message_t* package_message_data(Host_address_t* host_addr,
+                                Remote_address_t* target_addr,
                                 Message_data_t* data) {
-  // TODO make a check on the Message_data
+  // TODO(André) make a check on the Message_data
   Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
-  msg->host_addr = host_addr;
-  msg->target_addr = target_addr;
+  msg->host_addr = (struct sockaddr*) host_addr;
+  msg->target_addr = (struct sockaddr*) target_addr;
 
   memcpy(&(msg->data), data, sizeof(Message_data_t));
 

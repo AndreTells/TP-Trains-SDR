@@ -7,10 +7,15 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define MESSAGE_SIZE 2000
+#define SOCKET_PORT 9002
+
 int main(void) {
-  int socket_desc;
-  struct sockaddr_in server_addr, client_addr;
-  char server_message[2000], client_message[2000];
+  int socket_desc = 0;
+  struct sockaddr_in server_addr;
+  struct sockaddr_in client_addr;
+  char server_message[MESSAGE_SIZE];
+  char client_message[MESSAGE_SIZE];
   int client_struct_length = sizeof(client_addr);
 
   // Clean buffers:
@@ -28,7 +33,7 @@ int main(void) {
 
   // Set port and IP:
   server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(9002);
+  server_addr.sin_port = htons(SOCKET_PORT);
   //  server_addr.sin_addr.s_addr =  INADDR_ANY;
   server_addr.sin_addr.s_addr = inet_addr("192.168.1.106");
 
