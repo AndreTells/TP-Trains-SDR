@@ -25,7 +25,7 @@ int main(int argc, char * argv[]){
   // loop
   while(1){
     IF_VERBOSE(printf("waiting for a message ... \n"));
-    Message_t* msg = listen_message();
+    Message_t* msg = listen_message(0,0,0);
 
     IF_VERBOSE(printf("waiting for a message ... finished\n"));
 
@@ -35,7 +35,7 @@ int main(int argc, char * argv[]){
     IF_VERBOSE(printf("treating message ... finished\n"));
 
     IF_VERBOSE(printf("sending response ... \n"));
-    send_message(response);
+    send_message(response,0,NULL,0);
     IF_VERBOSE(printf("sending response ... finished\n"));
 
     IF_VERBOSE(

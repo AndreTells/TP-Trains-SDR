@@ -30,6 +30,11 @@
 // structure of a message
 #define MAX_MESSAGE_SIZE 2024
 
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 // generic Message data type
 typedef union{
   int cmd_code;
@@ -69,7 +74,7 @@ Message_t* package_message_data(struct sockaddr* host_addr,
                                 struct sockaddr* target_addr,
                                 Message_data_t* data);
 
-int send_message(Message_t* msg);
+int send_message(Message_t* msg, int socket_client,const struct sockaddr *server_address,socklen_t server_addrlen);
 
-Message_t* listen_message();
+Message_t* listen_message(int client_socket, struct sockaddr_in* server_addr, socklen_t* addr_len);
 #endif // TRAIN_COMMANDS_H_

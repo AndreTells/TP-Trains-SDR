@@ -18,12 +18,13 @@ int main(void){
 
   // loop
   Message_test_t test = {30, 2};
-  send_message(package_message_data(NULL,NULL,(Message_data_t*)&test));
+  
+  send_message(package_message_data(NULL,NULL,(Message_data_t*)&test),0,NULL,0);
 
-  Message_t* msg = listen_message();
+  Message_t* msg = listen_message(0,0,0);
 
   Message_t* response = route_messages(serv, msg);
 
-  send_message(response);
+  send_message(response,0,NULL,0);
   return 0;
 }
