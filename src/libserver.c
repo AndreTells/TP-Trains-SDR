@@ -1,10 +1,12 @@
+#include "libserver.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "verbose_mode.h"
-#include "libserver.h"
-#include "constants.h"
+
 #include "comms.h"
+#include "constants.h"
 #include "libtrain.h"
+#include "verbose_mode.h"
 
 #define MAX_TRAINS 10
 
@@ -24,68 +26,62 @@ Message_t* server_update_pos(Server_t* server, Message_t* msg);
 Message_t* server_req_lim_extension_pos(Server_t* server, Message_t* msg);
 
 // implementations
-Train_t get_top(Server_t* server){
-  return server->trains[server->top];
-}
+Train_t get_top(Server_t* server) { return server->trains[server->top]; }
 
-int get_next(int i){
-  int j = i+1 % MAX_TRAINS;
+int get_next(int i) {
+  int j = i + 1 % MAX_TRAINS;
   return j;
 }
 
-int get_prev(int i){
-  int j = (i-1);
-  if(j < 0) j = MAX_TRAINS -1;
+int get_prev(int i) {
+  int j = (i - 1);
+  if (j < 0) j = MAX_TRAINS - 1;
 
   return j;
 }
 
-int calculate_train_eoa(Server_t* server, int i){
-  if(i == server->start){
+int calculate_train_eoa(Server_t* server, int i) {
+  if (i == server->start) {
     return TRAIN_END_POS;
-  }
-  else{
+  } else {
     int i_prev_train = get_prev(i);
     return server->trains[i_prev_train].eoa;
   }
 }
 
-Message_data_t* create_server_ERR_msg(){
-  Message_data_t* data = (Message_data_t*) malloc(sizeof(Message_data_t));
+Message_data_t* create_server_ERR_msg() {
+  Message_data_t* data = (Message_data_t*)malloc(sizeof(Message_data_t));
   data->cmd_code = SERVER_ACK_ERROR;
 
   return data;
 }
 
-Message_data_t* create_server_SUC_msg(){
-  Message_data_t* data = (Message_data_t*) malloc(sizeof(Message_data_t));
+Message_data_t* create_server_SUC_msg() {
+  Message_data_t* data = (Message_data_t*)malloc(sizeof(Message_data_t));
   data->cmd_code = SERVER_ACK_SUCCESS;
 
   return data;
 }
 
-Message_t* route_messages(Server_t* server, Message_t* msg){
+Message_t* route_messages(Server_t* server, Message_t* msg) {
+  Message_t* response = package_message_data(msg->target_addr, msg->host_addr,
+                                             create_server_ERR_msg());
 
-  Message_t* response = package_message_data(
-                         msg->target_addr,
-                         msg->host_addr,
-                         create_server_ERR_msg());
-
-  switch(msg->data.cmd_code){
+  switch (msg->data.cmd_code) {
     case TRAIN_CONNECT_CMD:
       response = server_add_train(server, msg);
       break;
 
     case TRAIN_DISCONECT_CMD:
-      response = server_remove_train(server,msg);
+      response = server_remove_train(server, msg);
       break;
 
     case TRAIN_UPDATE_POS_CMD:
-      response = server_update_pos(server,msg);
+      response = server_update_pos(server, msg);
       break;
 
     case TRAIN_REQ_LIM_EXTENSION_CMD:
-      response = server_req_lim_extension_pos(server,msg);
+      response = server_req_lim_extension_pos(server, msg);
       break;
 
     case INFO_REQ_CMD:
@@ -96,17 +92,15 @@ Message_t* route_messages(Server_t* server, Message_t* msg){
   return response;
 }
 
-Message_t* server_add_train(Server_t* server, Message_t* msg){
-  //check if buffer is full
-  if(server->start == get_next(server->top)){
-    Message_t* response = package_message_data(
-                          msg->target_addr,
-                          msg->host_addr,
-                          create_server_ERR_msg());
+Message_t* server_add_train(Server_t* server, Message_t* msg) {
+  // check if buffer is full
+  if (server->start == get_next(server->top)) {
+    Message_t* response = package_message_data(msg->target_addr, msg->host_addr,
+                                               create_server_ERR_msg());
     return response;
   }
 
-  //effectively adding train to buffer
+  // effectively adding train to buffer
   Train_t train;
 
   train.addr = msg->host_addr;
@@ -114,7 +108,7 @@ Message_t* server_add_train(Server_t* server, Message_t* msg){
   server->top = get_next(server->top);
 
   train.pos = TRAIN_START_POS;
-  train.eoa = calculate_train_eoa(server,train.id);
+  train.eoa = calculate_train_eoa(server, train.id);
 
   // creating response
   Data_full_train_t response;
@@ -124,65 +118,56 @@ Message_t* server_add_train(Server_t* server, Message_t* msg){
   response.cmd_code = SERVER_ACK_SUCCESS;
 
   Message_t* response_msg = package_message_data(
-                         msg->target_addr,
-                         msg->host_addr,
-                         (Message_data_t*)&response);
+      msg->target_addr, msg->host_addr, (Message_data_t*)&response);
   return response_msg;
 }
 
-Message_t* server_remove_train(Server_t* server, Message_t* msg){
-  //check if buffer is emtpy
-  if(server->start == server->top){
-    Message_t* response = package_message_data(
-                          msg->target_addr,
-                          msg->host_addr,
-                          create_server_ERR_msg());
+Message_t* server_remove_train(Server_t* server, Message_t* msg) {
+  // check if buffer is emtpy
+  if (server->start == server->top) {
+    Message_t* response = package_message_data(msg->target_addr, msg->host_addr,
+                                               create_server_ERR_msg());
     return response;
   }
-  Message_t* response_msg = package_message_data(
-                          server->trains[server->start].addr,
-                          msg->host_addr,
-                          create_server_SUC_msg());
+  Message_t* response_msg =
+      package_message_data(server->trains[server->start].addr, msg->host_addr,
+                           create_server_SUC_msg());
   server->start = get_next(server->start);
 
   return response_msg;
 }
 
-Message_t* server_update_pos(Server_t* server, Message_t* msg){
-  Data_pos_t* data = (Data_pos_t*) &(msg->data);
+Message_t* server_update_pos(Server_t* server, Message_t* msg) {
+  Data_pos_t* data = (Data_pos_t*)&(msg->data);
 
   server->trains[data->id].pos = data->pos;
 
   Message_t* response_msg = package_message_data(
-                          server->trains[data->id].addr,
-                          msg->host_addr,
-                          create_server_SUC_msg());
+      server->trains[data->id].addr, msg->host_addr, create_server_SUC_msg());
   return response_msg;
 }
 
-Message_t* server_req_lim_extension_pos(Server_t* server, Message_t* msg){
-  Data_eoa_t* data = (Data_eoa_t*) &(msg->data);
+Message_t* server_req_lim_extension_pos(Server_t* server, Message_t* msg) {
+  Data_eoa_t* data = (Data_eoa_t*)&(msg->data);
 
-  server->trains[data->id].eoa = calculate_train_eoa(server,data->id);
+  server->trains[data->id].eoa = calculate_train_eoa(server, data->id);
   data->eoa = server->trains[data->id].eoa;
 
-
   Message_t* response_msg = package_message_data(
-                          server->trains[data->id].addr,
-                          msg->host_addr,
-                          (Message_data_t*) data);
+      server->trains[data->id].addr, msg->host_addr, (Message_data_t*)data);
   return response_msg;
 }
 
-Server_t* init_server(){
-  Server_t* serv = (Server_t*) malloc(sizeof(Server_t));
-  serv->start=0;
-  serv->top=-1;
+Server_t* init_server() {
+  Server_t* serv = (Server_t*)malloc(sizeof(Server_t));
+  serv->start = 0;
+  serv->top = -1;
 
-  Train_t NULL_TRAIN ={0,-1,-1,-1};
-  for(int i=0; i<MAX_TRAINS; i++){
+  Train_t NULL_TRAIN = {0, -1, -1, -1};
+  for (int i = 0; i < MAX_TRAINS; i++) {
     serv->trains[i] = NULL_TRAIN;
-    IF_VERBOSE(printf("train t_%d of the server created id: %d\n", i, serv->trains[i].id));
+    IF_VERBOSE(printf("train t_%d of the server created id: %d\n", i,
+                      serv->trains[i].id));
   }
 
   return serv;

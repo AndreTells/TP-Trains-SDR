@@ -2,72 +2,68 @@
 /*
 ====================================================================
 
-          SIMPLE CODE ABOUT UDP CLIENT USING SOCKET         
+          SIMPLE CODE ABOUT UDP CLIENT USING SOCKET
 
 ====================================================================
 */
 
+#include <arpa/inet.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <sys/types.h>
+#include <string.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-
+#include <sys/types.h>
 #include <unistd.h>
 
-#include <string.h>
+int main(int argv, char *argc[]) {
+  // create buffer
+  char server_message[2000], client_message[2000] = "Olá";
 
-int main(int argv, char *argc[]){
+  // create a socket
+  int server_socket;
+  server_socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 
-    // create buffer
-    char server_message[2000], client_message[2000] = "Olá";
+  if (server_socket < 0) {
+    printf("Error while creating socket\n");
+    return -1;
+  }
 
-    // create a socket
-    int server_socket;
-    server_socket = socket(AF_INET,SOCK_DGRAM,IPPROTO_UDP);
+  // specify an address for the server socket
 
-     if(server_socket < 0){
-        printf("Error while creating socket\n");
-        return -1;
-    }
+  struct sockaddr_in server_addr;
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_port = htons(7000);  // mudar porta ? Acho que n
+  // server_addr.sin_addr.s_addr = INADDR_ANY;                   // mudar isso
+  server_addr.sin_addr.s_addr =
+      inet_addr("192.168.1.108");  //       pra isso na rede da sala ?
 
-    // specify an address for the server socket
+  int server_struct_length = sizeof(server_addr);
 
-    struct sockaddr_in server_addr;
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(7000);                         // mudar porta ? Acho que n
-    //server_addr.sin_addr.s_addr = INADDR_ANY;                   // mudar isso
-    server_addr.sin_addr.s_addr = inet_addr("192.168.1.108");   //       pra isso na rede da sala ?
-    
-    
-    int server_struct_length = sizeof(server_addr);
-    
+  // Get input from the user:
 
-    // Get input from the user:
+  // Send the message to server:
+  if (sendto(server_socket, client_message, strlen(client_message), 0,
+             (struct sockaddr *)&server_addr, server_struct_length) < 0) {
+    printf("Unable to send message\n");
+    return -1;
+  }
 
-    // Send the message to server:
-    if(sendto(server_socket, client_message, strlen(client_message), 0,
-              (struct sockaddr*)&server_addr, server_struct_length) < 0){
-        printf("Unable to send message\n");
-        return -1;
-    }
+  printf("message sent \n");
+  printf("waiting for response\n");
 
-    printf("message sent \n");
-    printf("waiting for response\n");
-    
-    // Receive the server's response:
-    if(recvfrom(server_socket, server_message, sizeof(server_message), 0,
-                (struct sockaddr*)&server_addr, (socklen_t*)&server_struct_length) < 0){
-        printf("Error while receiving server's msg\n");
-        return -1;
-    }
+  // Receive the server's response:
+  if (recvfrom(server_socket, server_message, sizeof(server_message), 0,
+               (struct sockaddr *)&server_addr,
+               (socklen_t *)&server_struct_length) < 0) {
+    printf("Error while receiving server's msg\n");
+    return -1;
+  }
 
-    // print off the server's response
+  // print off the server's response
 
-    printf("The server sent the data: %s \n", server_message);
-    close(server_socket);
+  printf("The server sent the data: %s \n", server_message);
+  close(server_socket);
 
-    return 0;
+  return 0;
 }

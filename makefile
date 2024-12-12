@@ -39,3 +39,7 @@ teste_version_server:
 
 teste_version_client:
 	clang $(CFLAGS) src/teste_client.c -o ./bin/teste_version_client
+
+format_code:
+	clang-format --verbose -i --style=file src/*
+	clang-format --verbose -i --style=file include/*

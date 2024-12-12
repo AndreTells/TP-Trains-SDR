@@ -1,14 +1,15 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include"libserver.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-typedef struct{
+#include "libserver.h"
+
+typedef struct {
   int cmd_code;
   int value;
-}Message_test_t;
+} Message_test_t;
 
-int main(void){
+int main(void) {
   // Initialize server
   printf("server initialization\n");
   Server_t* serv = init_server();
@@ -19,6 +20,6 @@ int main(void){
 
   Message_t* response = route_messages(serv, msg);
 
-  send_message(0,response);
+  send_message(0, response);
   return 0;
 }
