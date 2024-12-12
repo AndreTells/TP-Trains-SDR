@@ -10,11 +10,9 @@
 
 
 int send_message(int socket_fd, Message_t* msg){
-  // we also can test use the flag MSG_CONFIRM to have a confirmation
-  if(sendto(socket_fd, msg, sizeof(*msg), 0,msg->target_addr, LEN_IPV4)<0){
-    perror("Its impossible to send the message\n");
-    return -1;
-  }
+
+  printf("Message sent: %d", msg->data.cmd_code);
+  free(msg);
 
   return 0;
 }
@@ -22,19 +20,7 @@ int send_message(int socket_fd, Message_t* msg){
 Message_t* listen_message(int socket_fd) {
 
     Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
-    socklen_t addr_len;
-
-    if (!msg) {
-        perror("Erro ao alocar memória para mensagem");
-        exit(-1);
-    }
-
-    // Receber mensagem do servidor
-   if(recvfrom(socket_fd, msg, sizeof(*msg), 0, NULL, &addr_len) < 0){
-        perror("Erro ao receber mensagem");
-        free(msg);
-        exit(-1);
-    }
+    msg->data.cmd_code = TRAIN_CONNECT_CMD;
 
     return msg;
 }
