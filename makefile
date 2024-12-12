@@ -29,7 +29,10 @@ server:
 	clang $(CFLAGS) src/verbose_mode.c src/libserver.c src/dummy_comms.c src/server.c -o ./bin/server
 
 dummy_version_server:
-	clang $(CFLAGS) src/dummy_libserver.c src/dummy_comms.c src/dummy_server.c -o ./bin/dummy_version
+	clang $(CFLAGS) src/dummy_libserver.c src/dummy_comms.c src/dummy_server.c -o ./bin/dummy_version_server
+
+dummy_version_train:
+	clang $(CFLAGS) src/dummy_train.c src/dummy_libtrain.c -o ./bin/dummy_version_train
 
 teste_version_server:
 	clang $(CFLAGS) src/teste_server.c  -o ./bin/teste_version_server

@@ -27,13 +27,13 @@ Train_t* create_train( struct sockaddr* host_addr, struct sockaddr* server_addr)
  * @param server_addr the server that'll be notified of the change
  * @return 0 if no errors have happened and -1 otherwise
 */
-int send_position_update(Train_t train,struct sockaddr* server_addr);
+int send_position_update(Train_t* train,struct sockaddr* server_addr);
 
 /* @brief request's the server that the host's train eoa be extended
  * @param train the local host's train
  * @param server_addr the server that'll be notified of the request
  * @return new_eoa the extended eoa returned by the server or -1 if an error has happened
 */
-int request_eoa_extension(Train_t train, struct sockaddr* server_addr);
+int request_eoa_extension(Train_t* train, struct sockaddr* server_addr);
 
 #endif // TRAIN_H_
