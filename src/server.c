@@ -3,7 +3,6 @@
 #include<string.h>
 #include<unistd.h>
 #include"libserver.h"
-#include"train.h"
 #include"verbose_mode.h"
 
 int main(int argc, char * argv[]){
@@ -19,13 +18,15 @@ int main(int argc, char * argv[]){
 
   IF_VERBOSE(printf("opening socket ... finished\n"));
 
+  // TODO open socket
+
   IF_VERBOSE(printf("click enter to continue\n"));
   IF_VERBOSE(read(0,NULL,10));
 
   // loop
   while(1){
     IF_VERBOSE(printf("waiting for a message ... \n"));
-    Message_t* msg = listen_message(0,0,0);
+    Message_t* msg = listen_message(0); // TODO change to actual socket fd
 
     IF_VERBOSE(printf("waiting for a message ... finished\n"));
 
@@ -35,7 +36,7 @@ int main(int argc, char * argv[]){
     IF_VERBOSE(printf("treating message ... finished\n"));
 
     IF_VERBOSE(printf("sending response ... \n"));
-    send_message(response,0,NULL,0);
+    send_message(0,response); // TODO change to actual socket fd
     IF_VERBOSE(printf("sending response ... finished\n"));
 
     IF_VERBOSE(

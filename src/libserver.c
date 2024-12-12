@@ -4,7 +4,7 @@
 #include "libserver.h"
 #include "constants.h"
 #include "comms.h"
-#include "train.h"
+#include "libtrain.h"
 
 #define MAX_TRAINS 10
 
