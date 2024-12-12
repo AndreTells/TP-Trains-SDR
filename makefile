@@ -43,3 +43,6 @@ teste_version_client:
 format_code:
 	clang-format --verbose -i --style=file src/*
 	clang-format --verbose -i --style=file include/*
+
+static_analyser:
+	clang-tidy src/* -- -I include
