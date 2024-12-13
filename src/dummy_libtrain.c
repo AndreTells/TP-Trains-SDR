@@ -1,6 +1,7 @@
 #include <unistd.h>
 
 #include "libtrain.h"
+#include "comms.h"
 
 Train_t* create_train(Host_address_t* host_addr,
                       Remote_address_t* server_addr) {
@@ -19,6 +20,9 @@ Train_t* create_train(Host_address_t* host_addr,
 int send_position_update(Train_t* train, struct sockaddr* server_addr) {
   train = NULL;
   server_addr = NULL;
+
+  // add send_message
+
   return 0;
 }
 

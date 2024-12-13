@@ -21,9 +21,9 @@ int main(int argc, char* argv[]) {
   //  int port = 0;
   // open socket UDP
 
-  struct sockaddr_in train_addr, server_addr;
-  train_addr = create_socket_UDP(SOCKET_PORT, IP_TRAIN);
-  server_addr = create_socket_UDP(SOCKET_PORT, IP_SERVER);
+  //struct sockaddr_in train_addr, server_addr;
+  //train_addr = create_socket_UDP(SOCKET_PORT, IP_TRAIN);
+  //server_addr = create_socket_UDP(SOCKET_PORT, IP_SERVER);
 
 /*
   struct sockaddr_in server_addr, client_addr;
@@ -63,7 +63,10 @@ int main(int argc, char* argv[]) {
   Message_t* msg_to_send;
   //Message_t* msg_received;
 
-  msg_to_send = package_message_data((Host_address_t *)&train_addr,(Remote_address_t*)&server_addr,&msg_buffer);
+  char* ip_train = IP_TRAIN;
+  char* ip_server = IP_SERVER;
+
+  msg_to_send = package_message_data((Host_address_t*)ip_train,(Remote_address_t*)ip_server,&msg_buffer);
 
   // send message to server
 

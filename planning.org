@@ -38,7 +38,7 @@ command.
 ** TODO unit test libserver
 ** TODO unit test libtrain
 ** TODO unit test comms
-** TODO create sock_utils.h and its implementation
+** DONE create sock_utils.h and its implementation
 ** TODO make server update a train's predecessor's eoa when it moves
 ** TODO change to socket based communication
 ** DONE test connection server-client
