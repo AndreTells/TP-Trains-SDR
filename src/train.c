@@ -11,6 +11,7 @@ int main(int argc, char* argv[]) {
   // TODO(André) get addr by command line
   int verbose = check_for_verbose_flag(argc, argv);
 
+  int port = 0;
   // open socket
 
   // initialize train
