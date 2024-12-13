@@ -160,7 +160,11 @@ int send_message(int socket_fd, Message_t* msg);
  */
 Message_t* listen_message(int socket_fd);
 
-
+/* @brief create a socket UDP
+ * @param socket_port number of socket port
+ * @param socket_address IP socket 
+ * @return socket created
+ */
 struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address);
 
 
