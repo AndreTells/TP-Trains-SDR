@@ -159,4 +159,9 @@ int send_message(int socket_fd, Message_t* msg);
  * @return msg the received message
  */
 Message_t* listen_message(int socket_fd);
+
+
+struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address);
+
+
 #endif  // TRAIN_COMMANDS_H_

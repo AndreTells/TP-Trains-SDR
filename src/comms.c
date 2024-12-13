@@ -8,6 +8,16 @@
 
 #define LEN_IPV4 32
 
+struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address){
+
+  struct sockaddr_in socket_ready;
+  socket_ready.sin_family = AF_INET;
+  socket_ready.sin_port = htons(socket_port);
+  socket_ready.sin_addr.s_addr = inet_addr(socket_address);
+
+  return socket_ready;
+}
+
 int send_message(int socket_fd, Message_t* msg) {
   // we also can test use the flag MSG_CONFIRM to have a confirmation
 
@@ -21,7 +31,7 @@ int send_message(int socket_fd, Message_t* msg) {
 
 Message_t* listen_message(int socket_fd) {
   Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
-  socklen_t addr_len=0;
+  socklen_t addr_len = 0;
 
   if (!msg) {
     perror("Erro ao alocar memória para mensagem");
