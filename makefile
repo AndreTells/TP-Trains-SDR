@@ -40,6 +40,9 @@ teste_version_server:
 teste_version_client:
 	clang $(CFLAGS) src/teste_client.c -o ./bin/teste_version_client
 
+train:
+	clang $(CFLAGS) src/verbose_mode.c src/dummy_libtrain.c src/comms.c src/train.c -o ./bin/train
+
 format_code:
 	clang-format --verbose -i --style=file src/*
 	clang-format --verbose -i --style=file include/*
