@@ -3,13 +3,18 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "comms.h"
 #include "libserver.h"
 #include "verbose_mode.h"
-
-#define SOCKET_PORT 7000
+#include "comms_flags.h"
 
 int main(int argc, char* argv[]) {
   int verbose = check_for_verbose_flag(argc, argv);
+  char* ip_address = check_for_ip_flag(argc, argv);
+  if (ip_address == NULL) {
+    IF_VERBOSE(verbose,printf("no ip provided, using 127.0.0.1 \n"));
+    ip_address = "127.0.0.1";
+  }
 
   // Initialize server
   IF_VERBOSE(verbose,printf("server initialization ... \n"));
@@ -30,13 +35,13 @@ int main(int argc, char* argv[]) {
   struct sockaddr_in server_addr;
   // Set port and IP:
   server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(SOCKET_PORT);
+  server_addr.sin_port = htons(PORT);
   //  server_addr.sin_addr.s_addr =  INADDR_ANY;
-  server_addr.sin_addr.s_addr = inet_addr("192.168.91.187");
+  server_addr.sin_addr.s_addr = inet_addr(ip_address);
 
   // Bind to the set port and IP:
-  if (bind(socket_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) <
-      0) {
+  if (bind(socket_fd, (struct sockaddr*)&server_addr,
+           sizeof(server_addr)) < 0) {
     printf("Couldn't bind to the port\n");
     return -1;
   }
@@ -47,6 +52,8 @@ int main(int argc, char* argv[]) {
 
   IF_VERBOSE(verbose,printf("click enter to continue\n"));
   IF_VERBOSE(verbose,read(0, NULL, 10));
+
+
 
   // loop
   while (1) {

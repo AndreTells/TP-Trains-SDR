@@ -30,7 +30,7 @@ command.
 - int train_position;
 - int train_limit;
 
-* Todo List [28%]
+* Todo List [58%]
 ** DONE iMplement dummy server
 ** DONE implement dummy client
 ** DONE simulate a connection between client and server in a file
@@ -43,6 +43,7 @@ command.
 ** TODO get IP and port through command line
 ** DONE change to socket based communication
 ** DONE test connection server-client
+* If there is enough time [0%]
 ** TODO implement controller
 ** TODO test connection controller-server
 ** TODO test connection controller-server & server-client

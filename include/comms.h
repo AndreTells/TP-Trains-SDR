@@ -32,9 +32,12 @@
 #define INFO_REQ_CMD 310
 #define INFO_SEND_CMD 300
 
-// structure of a message
+// internet related defines
 #define MAX_MESSAGE_SIZE 2024
 #define LEN_IPV4 32
+#define PORT 7000
+
+// structure of a message
 
 /*
  * @struct  Host_address_t
