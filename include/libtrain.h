@@ -11,7 +11,7 @@
 #include "comms.h"
 
 typedef struct {
-  struct sockaddr* addr;
+  struct sockaddr addr;
   int id;
   int pos;
   int eoa;

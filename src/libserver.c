@@ -66,8 +66,8 @@ Message_data_t* create_server_SUC_msg() {
 
 Message_t* route_messages(Server_t* server, Message_t* msg) {
   Message_t* response = package_message_data(
-                           (Host_address_t*)msg->target_addr,
-                           (Remote_address_t*)msg->host_addr,
+                           (Host_address_t*)&(msg->target_addr),
+                           (Remote_address_t*)&(msg->host_addr),
                            create_server_ERR_msg());
 
   switch (msg->data.cmd_code) {
@@ -98,8 +98,8 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
   // check if buffer is full
   if (server->start == get_next(server->top)) {
     Message_t* response = package_message_data(
-                              (Host_address_t*)msg->target_addr,
-                              (Remote_address_t*)msg->host_addr,
+                              (Host_address_t*)&(msg->target_addr),
+                              (Remote_address_t*)&(msg->host_addr),
                               create_server_ERR_msg());
     return response;
   }
@@ -122,8 +122,8 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
   response.cmd_code = SERVER_ACK_SUCCESS;
 
   Message_t* response_msg = package_message_data(
-      (Host_address_t*)msg->target_addr,
-      (Remote_address_t*)msg->host_addr,
+      (Host_address_t*)&(msg->target_addr),
+      (Remote_address_t*)&(msg->host_addr),
       (Message_data_t*)&response);
   return response_msg;
 }
@@ -132,15 +132,15 @@ Message_t* server_remove_train(Server_t* server, Message_t* msg) {
   // check if buffer is emtpy
   if (server->start == server->top) {
     Message_t* response = package_message_data(
-                            (Host_address_t*)msg->target_addr,
-                            (Remote_address_t*)msg->host_addr,
+                            (Host_address_t*)&(msg->target_addr),
+                            (Remote_address_t*)&(msg->host_addr),
                             create_server_ERR_msg());
     return response;
   }
   Message_t* response_msg =
       package_message_data(
-         (Host_address_t*)server->trains[server->start].addr,
-         (Remote_address_t*)msg->host_addr,
+         (Host_address_t*)&(server->trains[server->start].addr),
+         (Remote_address_t*)&(msg->host_addr),
          create_server_SUC_msg());
   server->start = get_next(server->start);
 
@@ -153,8 +153,8 @@ Message_t* server_update_pos(Server_t* server, Message_t* msg) {
   server->trains[data->id].pos = data->pos;
 
   Message_t* response_msg = package_message_data(
-      (Host_address_t*)server->trains[data->id].addr,
-      (Remote_address_t*)msg->host_addr,
+      (Host_address_t*)&(server->trains[data->id].addr),
+      (Remote_address_t*)&(msg->host_addr),
       create_server_SUC_msg());
   return response_msg;
 }
@@ -166,8 +166,8 @@ Message_t* server_req_lim_extension_pos(Server_t* server, Message_t* msg) {
   data->eoa = server->trains[data->id].eoa;
 
   Message_t* response_msg = package_message_data(
-      (Host_address_t*)server->trains[data->id].addr,
-      (Remote_address_t*)msg->host_addr,
+      (Host_address_t*)&(server->trains[data->id].addr),
+      (Remote_address_t*)&(msg->host_addr),
       (Message_data_t*)data);
   return response_msg;
 }
@@ -177,7 +177,7 @@ Server_t* init_server() {
   serv->start = 0;
   serv->top = -1;
 
-  Train_t NULL_TRAIN = {0, -1, -1, -1};
+  Train_t NULL_TRAIN = {{0}, -1, -1, -1};
   for (int i = 0; i < MAX_TRAINS; i++) {
     serv->trains[i] = NULL_TRAIN;
   }

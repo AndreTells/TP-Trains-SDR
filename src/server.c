@@ -6,6 +6,8 @@
 #include "libserver.h"
 #include "verbose_mode.h"
 
+#define SOCKET_PORT 7000
+
 int main(int argc, char* argv[]) {
   int verbose = check_for_verbose_flag(argc, argv);
 
@@ -17,6 +19,28 @@ int main(int argc, char* argv[]) {
   // open socket
   IF_VERBOSE(verbose,printf("opening socket ... \n"));
 
+  // Create UDP socket:
+  int socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+
+  if (socket_fd< 0) {
+    printf("Error while creating socket\n");
+    return -1;
+  }
+
+  struct sockaddr_in server_addr;
+  // Set port and IP:
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_port = htons(SOCKET_PORT);
+  //  server_addr.sin_addr.s_addr =  INADDR_ANY;
+  server_addr.sin_addr.s_addr = inet_addr("192.168.91.187");
+
+  // Bind to the set port and IP:
+  if (bind(socket_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) <
+      0) {
+    printf("Couldn't bind to the port\n");
+    return -1;
+  }
+
   IF_VERBOSE(verbose,printf("opening socket ... finished\n"));
 
   // TODO(André) open socket
@@ -27,8 +51,9 @@ int main(int argc, char* argv[]) {
   // loop
   while (1) {
     IF_VERBOSE(verbose,printf("waiting for a message ... \n"));
-    Message_t* msg = listen_message(0);  // TODO(André) change to actual socket fd
+    Message_t* msg = listen_message(socket_fd);  // TODO(André) change to actual socket fd
 
+    IF_VERBOSE(verbose,printf("received message from %d \n", msg->target_addr));
     IF_VERBOSE(verbose,printf("waiting for a message ... finished\n"));
 
     IF_VERBOSE(verbose,printf("treating message ... \n"));
@@ -37,7 +62,7 @@ int main(int argc, char* argv[]) {
     IF_VERBOSE(verbose,printf("treating message ... finished\n"));
 
     IF_VERBOSE(verbose,printf("sending response ... \n"));
-    send_message(0, response);  // TODO(André) change to actual socket fd
+    send_message(socket_fd, response);  // TODO(André) change to actual socket fd
     IF_VERBOSE(verbose,printf("sending response ... finished\n"));
 
     IF_VERBOSE(verbose,printf("continue ? (y/n)\n"); char res[2]; read(0, res, 2);

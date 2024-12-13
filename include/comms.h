@@ -132,8 +132,8 @@ typedef struct {
  * the data of the message
  */
 typedef struct {
-  struct sockaddr* host_addr;
-  struct sockaddr* target_addr;
+  in_addr_t host_addr;
+  in_addr_t target_addr;
   Message_data_t data;
 } Message_t;
 
