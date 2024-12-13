@@ -35,10 +35,18 @@
 // structure of a message
 #define MAX_MESSAGE_SIZE 2024
 
+/*
+ * @struct  Host_address_t
+ * @brief wrapper aronud 'struct sockaddrr' to better function legibility
+ */
 typedef struct {
   struct sockaddr address;
 }Host_address_t;
 
+/*
+ * @struct Remote_address_t
+ * @brief wrapper around 'struct sockdaddr' to better function legibility
+ */
 typedef struct {
   struct sockaddr address;
 }Remote_address_t;
