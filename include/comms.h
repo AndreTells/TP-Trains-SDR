@@ -34,13 +34,14 @@
 
 // structure of a message
 #define MAX_MESSAGE_SIZE 2024
+#define LEN_IPV4 32
 
 /*
  * @struct  Host_address_t
  * @brief wrapper aronud 'struct sockaddrr' to better function legibility
  */
 typedef struct {
-  struct sockaddr address;
+  char address[LEN_IPV4];
 }Host_address_t;
 
 /*
@@ -48,7 +49,7 @@ typedef struct {
  * @brief wrapper around 'struct sockdaddr' to better function legibility
  */
 typedef struct {
-  struct sockaddr address;
+  char address[LEN_IPV4];
 }Remote_address_t;
 
 /*
@@ -132,8 +133,8 @@ typedef struct {
  * the data of the message
  */
 typedef struct {
-  in_addr_t host_addr;
-  in_addr_t target_addr;
+  char host_addr[LEN_IPV4];
+  char target_addr[LEN_IPV4];
   Message_data_t data;
 } Message_t;
 

@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "comms.h"
 #include "constants.h"
@@ -107,7 +108,7 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
   // effectively adding train to buffer
   Train_t train;
 
-  train.addr = msg->host_addr;
+  memcpy(train.addr,msg->host_addr,LEN_IPV4);
   train.id = get_next(server->top);
   server->top = get_next(server->top);
 

@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
     IF_VERBOSE(verbose,printf("waiting for a message ... \n"));
     Message_t* msg = listen_message(socket_fd);  // TODO(André) change to actual socket fd
 
-    IF_VERBOSE(verbose,printf("received message from %d \n", msg->target_addr));
+    IF_VERBOSE(verbose,printf("received message from %s \n", msg->target_addr));
     IF_VERBOSE(verbose,printf("waiting for a message ... finished\n"));
 
     IF_VERBOSE(verbose,printf("treating message ... \n"));

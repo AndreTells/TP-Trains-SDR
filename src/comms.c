@@ -6,7 +6,7 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#define LEN_IPV4 32
+#define PORT 0
 
 struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address){
 
@@ -21,7 +21,9 @@ struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address){
 int send_message(int socket_fd, Message_t* msg) {
   // we also can test use the flag MSG_CONFIRM to have a confirmation
 
-  if (sendto(socket_fd, msg, sizeof(*msg), 0, &(msg->target_addr), LEN_IPV4) < 0) {
+  struct sockaddr_in target = create_socket_UDP(PORT, msg->target_addr);
+
+  if (sendto(socket_fd, msg, sizeof(*msg), 0,(struct sockaddr* ) &target, LEN_IPV4) < 0) {
     perror("Its impossible to send the message\n");
     return -1;
   }
@@ -54,8 +56,8 @@ Message_t* package_message_data(Host_address_t* host_addr,
   // TODO(André) make a check on the Message_data
   Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
 
-  memcpy(&(msg->host_addr), host_addr, sizeof(struct sockaddr));
-  memcpy(&(msg->target_addr), target_addr, sizeof(struct sockaddr));
+  memcpy(&(msg->host_addr), host_addr, sizeof(Host_address_t));
+  memcpy(&(msg->target_addr), target_addr, sizeof(Remote_address_t));
 
   memcpy(&(msg->data), data, sizeof(Message_data_t));
 
