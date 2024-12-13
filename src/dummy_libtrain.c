@@ -9,7 +9,7 @@ Train_t* create_train(Host_address_t* host_addr,
   server_addr = NULL;
 
   Train_t* train = (Train_t*)malloc(sizeof(Train_t));
-  train->addr = NULL;
+  //train->addr = NULL;
   train->id = 0;
   train->pos = 1;
   train->eoa = 2;
