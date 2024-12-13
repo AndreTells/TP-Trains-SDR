@@ -11,7 +11,7 @@
 #include "comms.h"
 
 typedef struct {
-  struct sockaddr* addr;
+  char addr[LEN_IPV4];
   int id;
   int pos;
   int eoa;

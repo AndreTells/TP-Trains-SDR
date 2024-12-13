@@ -40,6 +40,7 @@ command.
 ** TODO unit test comms
 ** DONE create sock_utils.h and its implementation
 ** TODO make server update a train's predecessor's eoa when it moves
+** TODO get IP and port through command line
 ** TODO change to socket based communication
 ** DONE test connection server-client
 ** TODO implement controller
