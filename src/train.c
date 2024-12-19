@@ -9,7 +9,6 @@
 #include "constants.h"
 #include "verbose_mode.h"
 
-#define SOCKET_PORT 7000
 #define IP_TRAIN "192.168.1.113"
 #define IP_SERVER "192.168.1.104"
 
@@ -37,7 +36,7 @@ int main(int argc, char* argv[]) {
   int socket_fd = 0;
   struct sockaddr_in train_addr;
   socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  train_addr = create_socket_UDP(SOCKET_PORT, IP_TRAIN);
+  train_addr = create_socket_UDP(PORT, IP_TRAIN);
 
   // ===================================================== Bind to the set port and IP:
   
@@ -63,15 +62,12 @@ int main(int argc, char* argv[]) {
   IF_VERBOSE(verbose,read(0, NULL, 10));
 
   // ===================================================== Create 2 msg buffer to send and receive a message to server
-
-  Message_data_t msg_buffer;
   Message_t* msg_to_send;
   Message_t* msg_received;
 
 // ===================================================== Package message to create the train
 
-  msg_buffer.cmd_code = TRAIN_CONNECT_CMD; // test
-  msg_to_send = package_message_data((Host_address_t*)ip_train,(Remote_address_t*)ip_server,&msg_buffer);
+  msg_to_send = package_message_data((Host_address_t*)ip_train,(Remote_address_t*)ip_server,TRAIN_CONNECT_CMD,-1,-1,-1);
 
 
   IF_VERBOSE(verbose,printf("Sending message to server ...\n"));
@@ -89,20 +85,39 @@ int main(int argc, char* argv[]) {
   IF_VERBOSE(verbose,printf("Receiving message from server ... finished\n"));
   IF_VERBOSE(verbose,printf("received message from %s \n", msg_received->target_addr));
 
-  char command [10];
+  train->id = msg_received->train_id;
+  train->pos = msg_received->pos;
+  train->eoa = msg_received->eoa;
+  
+  IF_VERBOSE(verbose,printf("cmd_code msg_received_data %d \n", msg_received->cmd_code));
+  IF_VERBOSE(verbose,printf("id msg_received_data %d \n", msg_received->train_id));
+  IF_VERBOSE(verbose,printf("pos msg_received_data %d \n", msg_received->pos));
+  IF_VERBOSE(verbose,printf("eoa msg_received_data %d \n", msg_received->eoa));
 
+  char command [10];
+  int cmd_to_send = 0;
+
+  show_train(train);
+
+  printf("TYPE A FOR ADVANCE THE TRAIN\n U FOR UPDATE SERVER \n E FOR ASK FOR A EXTENSION\n L FOR ASK FOR A EXIT\n");
 
   while (1) {
-    printf("TYPE A FOR ADVANCE THE TRAIN\n U FOR UPDATE SERVER \n E FOR ASK FOR A EXTENSION\n");
     fgets(command,10,stdin);
 
     switch (command[0]){
 
       case 'A':
         if(train->pos < train->eoa){
-          IF_VERBOSE(verbose,printf("Advancing one position\n"));
-          train->pos++;
-          msg_buffer.cmd_code = 0; // Don't send msg to server 
+          char adv_step [4];
+          printf("HOW MUCH DO U WANT AVANCE ?\n");
+          fgets(adv_step,4,stdin);
+          IF_VERBOSE(verbose,printf("ok ! \n"));
+          if(atoi(adv_step) < 0 || train->pos+atoi(adv_step) > 100){
+            printf("U CAN'T MOVE THERE \n");
+            break;
+          } 
+          train->pos += atoi(adv_step);
+          cmd_to_send = 0; // Don't send msg to server 
 
           }
         else{
@@ -112,26 +127,33 @@ int main(int argc, char* argv[]) {
 
       case 'U':
         IF_VERBOSE(verbose,printf("Updating server....\n"));
-        msg_buffer.cmd_code = TRAIN_UPDATE_POS_CMD;
+        cmd_to_send = TRAIN_UPDATE_POS_CMD;
         break;
 
       case 'E':
         IF_VERBOSE(verbose,printf("Requesting a extension to server\n"));
-        msg_buffer.cmd_code = TRAIN_REQ_LIM_EXTENSION_CMD;
+        cmd_to_send = TRAIN_REQ_LIM_EXTENSION_CMD;
         break;
+
+      case 'L':
+      IF_VERBOSE(verbose,printf("Requesting a exit to server\n"));
+      cmd_to_send = TRAIN_DISCONECT_CMD;
+      break;
 
       default:
         break;
 
       }
 
-  // ===================================================== Package message
-
-  msg_to_send = package_message_data((Host_address_t*)ip_train,(Remote_address_t*)ip_server,&msg_buffer);
-
+  
   // ===================================================== Send message to server
 
-  if(msg_buffer.cmd_code != 0){
+  if(cmd_to_send != 0){
+
+    // ===================================================== Package message
+
+    msg_to_send = package_message_data((Host_address_t*)ip_train,(Remote_address_t*)ip_server,cmd_to_send,train->id,train->pos,train->eoa);
+
 
     IF_VERBOSE(verbose,printf("Sending message to server ...\n"));
     check_send = send_message(socket_fd, msg_to_send);
@@ -148,10 +170,24 @@ int main(int argc, char* argv[]) {
     IF_VERBOSE(verbose,printf("Receiving message from server ... finished\n"));
     IF_VERBOSE(verbose,printf("received message from %s \n", msg_received->target_addr));
 
+    if(msg_received->cmd_code != SERVER_ACK_ERROR){
+      train->id = msg_received->train_id;
+      train->pos = msg_received->pos;
+      train->eoa = msg_received->eoa;
+    }
+
+    if(msg_received->cmd_code != SERVER_ACK_ERROR && command[0] == 'L'){
+      break;
+    }
+
+
+    show_train(train);
+
+  }else{
+    printf("UPDATE TO SEE YOUR NEW CONFIGURATION [TYPE U]\n");
+    
   }
 
-  show_train(train);
-     // sleep(2);
   }
 
 
