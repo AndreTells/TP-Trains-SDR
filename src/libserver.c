@@ -46,7 +46,7 @@ int calculate_train_eoa(Server_t* server, int train_id) {
   int eoa = TRAIN_END_POS;
   if (train_id != server->start) {
     int id_prev_train = get_prev(train_id);
-    eoa = server->trains[id_prev_train].eoa;
+    eoa = server->trains[id_prev_train].pos;
   }
   return eoa;
 }
@@ -91,6 +91,14 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
     return response;
   }
 
+  if(server->trains[get_prev(server->top)].pos == TRAIN_START_POS) {
+    Message_t* response = package_message_data(
+                              (Host_address_t*) &(msg->target_addr),
+                              (Remote_address_t*) &(msg->host_addr),
+                              SERVER_ACK_ERROR,-1,-1,-1);
+    return response;
+  }
+
   // effectively adding train to buffer
 
   int train_id = server->top;
@@ -111,6 +119,7 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
       server->trains[train_id].pos,
       server->trains[train_id].eoa);
 
+
   return response_msg;
 }
 
@@ -122,6 +131,15 @@ Message_t* server_remove_train(Server_t* server, Message_t* msg) {
                             (Remote_address_t*)&(msg->host_addr),
                             SERVER_ACK_ERROR,-1,-1,-1);
     return response;
+  }
+
+  if(server->trains[msg->train_id].pos != TRAIN_END_POS){
+    Message_t* response = package_message_data(
+                            (Host_address_t*)&(msg->target_addr),
+                            (Remote_address_t*)&(msg->host_addr),
+                            SERVER_ACK_ERROR,-1,-1,-1);
+    return response;
+
   }
   Message_t* response_msg =
       package_message_data(
@@ -135,12 +153,43 @@ Message_t* server_remove_train(Server_t* server, Message_t* msg) {
 
 Message_t* server_update_pos(Server_t* server, Message_t* msg) {
 
+  if(msg->pos > TRAIN_END_POS || msg->pos < TRAIN_START_POS){
+
+    Message_t* response = package_message_data(
+                            (Host_address_t*)&(msg->target_addr),
+                            (Remote_address_t*)&(msg->host_addr),
+                            SERVER_ACK_ERROR,-1,-1,-1);
+    return response;
+
+  }
+
+  if(msg->pos <= server->trains[msg->train_id].pos){
+
+    Message_t* response = package_message_data(
+                            (Host_address_t*)&(msg->target_addr),
+                            (Remote_address_t*)&(msg->host_addr),
+                            SERVER_ACK_ERROR,-1,-1,-1);
+    return response;
+  }
+
+  if(msg->pos > server->trains[msg->train_id].eoa){
+
+    Message_t* response = package_message_data(
+                            (Host_address_t*)&(msg->target_addr),
+                            (Remote_address_t*)&(msg->host_addr),
+                            SERVER_ACK_ERROR,-1,-1,-1);
+    return response;
+  }
+
   server->trains[msg->train_id].pos = msg->pos;
 
   Message_t* response_msg = package_message_data(
       (Host_address_t*)&(server->trains[msg->train_id].addr),
       (Remote_address_t*)&(msg->host_addr),
-      SERVER_ACK_SUCCESS,-1,-1,-1);
+      SERVER_ACK_SUCCESS,
+      server->trains[msg->train_id].id,
+      server->trains[msg->train_id].pos,
+      server->trains[msg->train_id].eoa);
   return response_msg;
 }
 
@@ -151,7 +200,10 @@ Message_t* server_req_lim_extension_pos(Server_t* server, Message_t* msg) {
   Message_t* response_msg = package_message_data(
       (Host_address_t*)&(server->trains[msg->train_id].addr),
       (Remote_address_t*)&(msg->host_addr),
-      SERVER_ACK_SUCCESS,-1,-1,server->trains[msg->train_id].eoa);
+      SERVER_ACK_SUCCESS,
+      server->trains[msg->train_id].id,
+      server->trains[msg->train_id].pos,
+      server->trains[msg->train_id].eoa);
 
   return response_msg;
 }
