@@ -37,4 +37,11 @@ int send_position_update(Train_t* train, struct sockaddr* server_addr);
  */
 int request_eoa_extension(Train_t* train, struct sockaddr* server_addr);
 
+
+/* @brief print all train stats
+ * @param train that we want to know
+ * @return void
+ */
+void show_train(Train_t *train);
+
 #endif  // TRAIN_H_
