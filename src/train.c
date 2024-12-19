@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
           printf("HOW MUCH DO U WANT AVANCE ?\n");
           fgets(adv_step,4,stdin);
           IF_VERBOSE(verbose,printf("ok ! \n"));
-          if(atoi(adv_step) < 0 || train->pos+atoi(adv_step) > 100){
+          if(atoi(adv_step) < 0 || train->pos+atoi(adv_step) > train->eoa){
             printf("U CAN'T MOVE THERE \n");
             break;
           } 
