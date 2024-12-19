@@ -32,9 +32,12 @@
 #define INFO_REQ_CMD 310
 #define INFO_SEND_CMD 300
 
-// structure of a message
+// internet related defines
 #define MAX_MESSAGE_SIZE 2024
 #define LEN_IPV4 32
+#define PORT 7000
+
+// structure of a message
 
 /*
  * @struct  Host_address_t
@@ -53,75 +56,6 @@ typedef struct {
 }Remote_address_t;
 
 /*
- * @union Message_data_t
- * @brief 'interface' for message data
- * @var Message_data_t::cmd_code
- * a int value identifying which command this data is directed at
- * @var Message_data_t::data
- * enough space to store an arbitrary ammount of data, allowing other structs to
- * 'implement' the Message_data_t interface and still be passed to the comms
- * functions
- */
-typedef union {
-  int cmd_code;
-  void* data[MAX_MESSAGE_SIZE];
-} Message_data_t;
-
-/*
- * @struct Data_full_train_t
- * @brief Message data with all infos on train, 'implementing the
- * Message_data_type_t interface'
- * @var Data_full_train_t::cmd_code
- * iden. to the interface
- * @var Data_full_train_t::id
- * id of the train described
- * @var Data_full_train_t::pos
- * position of the train
- * @var Data_full_train_t::eoa
- * until when the train can advance without conflicts
- */
-typedef struct {
-  int cmd_code;
-  int id;
-  int pos;
-  int eoa;
-} Data_full_train_t;
-
-/*
- * @struct Data_pos_t
- * @brief Message data with position and id of train, 'implementing the
- * Message_data_type_t interface'
- * @var Data_pos_t::cmd_code
- * iden. to the interface
- * @var Data_pos_t::id
- * id of the train described
- * @var Data_pos_t::pos
- * position of the train
- */
-typedef struct {
-  int cmd_code;
-  int id;
-  int pos;
-} Data_pos_t;
-
-/*
- * @struct Data_eoa_t
- * @brief Message data with eoa and id of train, 'implementing the
- * Message_data_type_t interface'
- * @var Data_pos_t::cmd_code
- * iden. to the interface
- * @var Data_pos_t::id
- * id of the train described
- * @var Data_eoa__t::eoa
- * until when the train can advance without conflicts
- */
-typedef struct {
-  int cmd_code;
-  int id;
-  int eoa;
-} Data_eoa_t;
-
-/*
  * @struct Message_t
  * @brief Package's the Message_data to make it easier to send it. Sholud only
  * be generated through the package_message_data function
@@ -135,7 +69,10 @@ typedef struct {
 typedef struct {
   char host_addr[LEN_IPV4];
   char target_addr[LEN_IPV4];
-  Message_data_t data;
+  int cmd_code;
+  int train_id;
+  int pos;
+  int eoa;
 } Message_t;
 
 /* @brief creates an instance of Message_t
@@ -146,7 +83,10 @@ typedef struct {
  */
 Message_t* package_message_data(Host_address_t* host_addr,
                                 Remote_address_t* target_addr,
-                                Message_data_t* data);
+                                int cmd_code,
+                                int train_id,
+                                int pos,
+                                int eoa);
 
 /* @brief sends a message through the given file descriptor
  * @param socket_client file descriptor of the socket

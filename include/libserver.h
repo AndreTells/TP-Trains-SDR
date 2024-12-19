@@ -34,4 +34,6 @@ Message_t* route_messages(Server_t* server, Message_t* msg);
  */
 Server_t* init_server();
 
+void print_server_state(Server_t* server);
+
 #endif  // LIBSERVER_H_
