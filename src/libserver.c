@@ -109,7 +109,6 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
   Train_t train;
 
   memcpy(train.addr,msg->host_addr,LEN_IPV4);
-  train.id = get_next(server->top);
   server->top = get_next(server->top);
 
   train.pos = TRAIN_START_POS;

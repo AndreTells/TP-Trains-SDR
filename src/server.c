@@ -48,7 +48,6 @@ int main(int argc, char* argv[]) {
 
   IF_VERBOSE(verbose,printf("opening socket ... finished\n"));
 
-  // TODO(André) open socket
 
   IF_VERBOSE(verbose,printf("click enter to continue\n"));
   IF_VERBOSE(verbose,read(0, NULL, 10));
@@ -58,7 +57,7 @@ int main(int argc, char* argv[]) {
   // loop
   while (1) {
     IF_VERBOSE(verbose,printf("waiting for a message ... \n"));
-    Message_t* msg = listen_message(socket_fd);  // TODO(André) change to actual socket fd
+    Message_t* msg = listen_message(socket_fd);
 
     IF_VERBOSE(verbose,printf("received message from %s \n", msg->host_addr));
     IF_VERBOSE(verbose,printf("received message with code %d \n", msg->data.cmd_code));
@@ -73,7 +72,7 @@ int main(int argc, char* argv[]) {
     IF_VERBOSE(verbose,printf("treating message ... finished\n"));
 
     IF_VERBOSE(verbose,printf("sending response ... \n"));
-    send_message(socket_fd, response);  // TODO(André) change to actual socket fd
+    send_message(socket_fd, response);
     IF_VERBOSE(verbose,printf("sending response ... finished\n"));
 
     IF_VERBOSE(verbose,printf("continue ? (y/n)\n"); char res[2]; read(0, res, 2);
