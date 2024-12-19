@@ -1,7 +1,10 @@
 #include <unistd.h>
+#include <string.h>
 
 #include "libtrain.h"
 #include "comms.h"
+
+
 
 Train_t* create_train(Host_address_t* host_addr,
                       Remote_address_t* server_addr) {
@@ -9,12 +12,21 @@ Train_t* create_train(Host_address_t* host_addr,
   server_addr = NULL;
 
   Train_t* train = (Train_t*)malloc(sizeof(Train_t));
-  //train->addr = NULL;
-  train->id = 0;
-  train->pos = 1;
-  train->eoa = 2;
+
+  strcpy(train->addr,"");
+  train->id = -1;
+  train->pos = -1;
+  train->eoa = 0;
 
   return train;
+}
+
+void show_train(Train_t *train){
+
+  printf("ID train : %d\n", train->id);
+  printf("Pos train %d : %d\n", train->id, train->pos);
+  printf("Eoa train %d : %d\n", train->id, train->eoa);
+
 }
 
 int send_position_update(Train_t* train, struct sockaddr* server_addr) {

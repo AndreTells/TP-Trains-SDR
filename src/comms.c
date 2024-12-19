@@ -7,6 +7,26 @@
 #include <sys/socket.h>
 
 
+int check_for_ip_client_flag(int argc, char* argv[]) {
+  int ip_client_flag = 0;
+  for (int i = 1; i < argc; i++) {
+    if (strcmp(argv[i], "--IPCLIENT") == 0 || strcmp(argv[i], "--IPC") == 0) {
+      ip_client_flag = i + 1;
+    }
+  }
+  return ip_client_flag;
+}
+
+int check_for_ip_server_flag(int argc, char* argv[]) {
+  int ip_server_flag = 0;
+  for (int i = 1; i < argc; i++) {
+    if (strcmp(argv[i], "--IPSERVER") == 0 || strcmp(argv[i], "--IPS") == 0) {
+      ip_server_flag = i + 1;
+    }
+  }
+  return ip_server_flag;
+}
+
 struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address){
 
   struct sockaddr_in socket_ready;

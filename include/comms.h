@@ -108,5 +108,7 @@ Message_t* listen_message(int socket_fd);
  */
 struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address);
 
+int check_for_ip_client_flag(int argc, char* argv[]);
+int check_for_ip_server_flag(int argc, char* argv[]);
 
 #endif  // TRAIN_COMMANDS_H_
