@@ -59,6 +59,7 @@ Message_t* package_message_data(Host_address_t* host_addr,
   memcpy(&(msg->host_addr), host_addr, sizeof(*host_addr));
   memcpy(&(msg->target_addr), target_addr, sizeof(*target_addr));
   msg->cmd_code = cmd_code;
+  msg->trai_id = train_id;
   msg->pos = pos;
   msg->eoa = eoa;
 

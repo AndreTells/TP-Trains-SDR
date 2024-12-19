@@ -12,6 +12,7 @@ int main(void){
 
   print_server_state(serv);
   Message_t* resp = route_messages(serv,msg);
+  route_messages(serv,msg);
 
     printf("received message from %s \n", resp->host_addr);
     printf("received message from %s \n", resp->target_addr);
