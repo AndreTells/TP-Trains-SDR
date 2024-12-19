@@ -110,7 +110,6 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
   server->trains[train_id].pos = TRAIN_START_POS;
   server->trains[train_id].eoa = calculate_train_eoa(server, train_id);
 
-  printf("new train id : %d\n", train_id);
 
   Message_t* response_msg = package_message_data(
       (Host_address_t*)&(msg->target_addr),
@@ -120,7 +119,6 @@ Message_t* server_add_train(Server_t* server, Message_t* msg) {
       server->trains[train_id].pos,
       server->trains[train_id].eoa);
 
-  printf("new train id : %d\n", response_msg->train_id);
 
   return response_msg;
 }
