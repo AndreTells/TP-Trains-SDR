@@ -4,6 +4,8 @@
 #include "libtrain.h"
 #include "comms.h"
 
+
+
 Train_t* create_train(Host_address_t* host_addr,
                       Remote_address_t* server_addr) {
   host_addr = NULL;
@@ -14,7 +16,7 @@ Train_t* create_train(Host_address_t* host_addr,
   strcpy(train->addr,"");
   train->id = -1;
   train->pos = -1;
-  train->eoa = -1;
+  train->eoa = 0;
 
   return train;
 }
