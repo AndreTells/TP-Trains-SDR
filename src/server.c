@@ -53,7 +53,8 @@ int main(int argc, char* argv[]) {
   IF_VERBOSE(verbose,read(0, NULL, 10));
 
 
-
+  printf("Initial state of server \n");
+  print_server_state(serv);
   // loop
   while (1) {
     IF_VERBOSE(verbose,printf("waiting for a message ... \n"));
@@ -67,10 +68,10 @@ int main(int argc, char* argv[]) {
     IF_VERBOSE(verbose,printf("waiting for a message ... finished\n"));
 
     IF_VERBOSE(verbose,printf("treating message ... \n"));
-    print_server_state(serv);
 
     Message_t* response = route_messages(serv, msg);
 
+    printf("New state of server \n");
     print_server_state(serv);
 
     IF_VERBOSE(verbose,printf("cmd_code msg_received_data %d \n", response->cmd_code));
