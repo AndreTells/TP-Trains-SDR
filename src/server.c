@@ -60,13 +60,23 @@ int main(int argc, char* argv[]) {
     Message_t* msg = listen_message(socket_fd);
 
     IF_VERBOSE(verbose,printf("received message from %s \n", msg->host_addr));
-    IF_VERBOSE(verbose,printf("received message with code %d \n", msg->data.cmd_code));
+    IF_VERBOSE(verbose,printf("received message from %s \n", msg->target_addr));
+    IF_VERBOSE(verbose,printf("received message with code %d \n", msg->cmd_code));
+    IF_VERBOSE(verbose,printf("received message with size %lu \n", sizeof(msg)));
+
     IF_VERBOSE(verbose,printf("waiting for a message ... finished\n"));
 
     IF_VERBOSE(verbose,printf("treating message ... \n"));
+    print_server_state(serv);
+
     Message_t* response = route_messages(serv, msg);
 
     print_server_state(serv);
+
+    IF_VERBOSE(verbose,printf("cmd_code msg_received_data %d \n", response->cmd_code));
+    IF_VERBOSE(verbose,printf("id msg_received_data %d \n", response->train_id));
+    IF_VERBOSE(verbose,printf("pos msg_received_data %d \n", response->pos));
+    IF_VERBOSE(verbose,printf("eoa msg_received_data %d \n", response->eoa));
 
     IF_VERBOSE(verbose,printf("sending message %s \n", response->target_addr));
     IF_VERBOSE(verbose,printf("treating message ... finished\n"));

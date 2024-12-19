@@ -24,8 +24,7 @@ int send_message(int socket_fd, Message_t* msg) {
 
   if (sendto(socket_fd, msg, sizeof(*msg), 0,(struct sockaddr* ) &target, LEN_IPV4) < 0) {
     perror("Its impossible to send the message\n");
-    return -1;
-  }
+    return -1;}
 
   return 0;
 }
@@ -51,14 +50,18 @@ Message_t* listen_message(int socket_fd) {
 
 Message_t* package_message_data(Host_address_t* host_addr,
                                 Remote_address_t* target_addr,
-                                Message_data_t* data) {
-  // TODO(André) make a check on the Message_data
+                                int cmd_code,
+                                int train_id,
+                                int pos,
+                                int eoa){
   Message_t* msg = (Message_t*)malloc(sizeof(Message_t));
 
-  memcpy(&(msg->host_addr), host_addr, sizeof(Host_address_t));
-  memcpy(&(msg->target_addr), target_addr, sizeof(Remote_address_t));
+  memcpy(&(msg->host_addr), host_addr, sizeof(*host_addr));
+  memcpy(&(msg->target_addr), target_addr, sizeof(*target_addr));
+  msg->cmd_code = cmd_code;
+  msg->pos = pos;
+  msg->eoa = eoa;
 
-  memcpy(&(msg->data), data, sizeof(Message_data_t));
 
   return msg;
 }
