@@ -185,3 +185,11 @@ Server_t* init_server() {
 
   return serv;
 }
+
+void print_server_state(Server_t* server){
+  printf("+-----+-----+\n");
+  for(int i=server->start; i<=server->top; i = get_next(i)){
+    printf("| %03d | %03d | %03d |\n",server->trains[i].id ,server->trains[i].pos, server->trains[i].eoa);
+  }
+  printf("+-----+-----+\n");
+}

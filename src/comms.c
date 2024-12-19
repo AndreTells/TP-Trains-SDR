@@ -6,7 +6,6 @@
 #include <string.h>
 #include <sys/socket.h>
 
-#define PORT 7000
 
 struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address){
 

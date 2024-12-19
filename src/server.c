@@ -67,6 +67,8 @@ int main(int argc, char* argv[]) {
     IF_VERBOSE(verbose,printf("treating message ... \n"));
     Message_t* response = route_messages(serv, msg);
 
+    print_server_state(serv);
+
     IF_VERBOSE(verbose,printf("sending message %s \n", response->target_addr));
     IF_VERBOSE(verbose,printf("treating message ... finished\n"));
 

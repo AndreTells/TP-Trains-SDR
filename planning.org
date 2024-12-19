@@ -40,7 +40,7 @@ command.
 ** TODO unit test libtrain
 ** TODO unit test comms
 ** DONE create sock_utils.h and its implementation
-** TODO get IP and port through command line
+** DONE get IP and port through command line
 ** DONE change to socket based communication
 ** DONE test connection server-client
 * If there is enough time [0%]
