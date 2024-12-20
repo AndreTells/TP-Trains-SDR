@@ -30,19 +30,20 @@ command.
 - int train_position;
 - int train_limit;
 
-* Todo List [58%]
+* Todo List [100%]
 ** DONE iMplement dummy server
 ** DONE implement dummy client
 ** DONE simulate a connection between client and server in a file
 ** DONE outline which functions will be needed for the lib
-** TODO implement libtrain
-** TODO unit test libserver
-** TODO unit test libtrain
-** TODO unit test comms
+** DONE implement libtrain
+** DONE unit test libserver
+** DONE unit test libtrain
+** DONE unit test comms
 ** DONE create sock_utils.h and its implementation
 ** DONE get IP and port through command line
 ** DONE change to socket based communication
 ** DONE test connection server-client
+
 * If there is enough time [0%]
 ** TODO implement controller
 ** TODO test connection controller-server
