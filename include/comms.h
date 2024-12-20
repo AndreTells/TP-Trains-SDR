@@ -101,8 +101,14 @@ int send_message(int socket_fd, Message_t* msg);
  */
 Message_t* listen_message(int socket_fd);
 
-
+/* @brief create a socket UDP
+ * @param socket_port number of socket port
+ * @param socket_address IP socket 
+ * @return socket created
+ */
 struct sockaddr_in create_socket_UDP(int socket_port, char* socket_address);
 
+int check_for_ip_client_flag(int argc, char* argv[]);
+int check_for_ip_server_flag(int argc, char* argv[]);
 
 #endif  // TRAIN_COMMANDS_H_
