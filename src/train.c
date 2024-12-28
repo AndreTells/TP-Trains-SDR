@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
   int socket_fd = 0;
   struct sockaddr_in train_addr;
   socket_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  train_addr = create_socket_UDP(PORT, IP_TRAIN);
+  train_addr = create_socket_UDP(PORT, ip_train);
 
   // ===================================================== Bind to the set port and IP:
   

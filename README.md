@@ -3,6 +3,13 @@ groupe:
  - André Silva Telles
  - Gabriel Sousa Fontenele
  
-# Ce qu'est Implementé 
- - envoie de message entre deux ordinateurs (teste_*)
- - version 'dummy' du serveur
+# Pour compiler le code
+make server
+make train
+
+obs: il faut changer les ips dans les defines du fichier train.c
+ 
+# Pour éxecuter le code
+
+./bin/server --ip << votre ip >>
+./bin/train
